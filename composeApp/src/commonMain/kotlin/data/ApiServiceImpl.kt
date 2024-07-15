@@ -3,6 +3,7 @@ package data
 import data.local.PrefImpl
 import domain.model.ApiResponse
 import domain.ApiService
+import domain.PrefRepository
 import domain.model.Currency
 import domain.model.CurrencyCode
 import domain.model.RequestState
@@ -16,7 +17,7 @@ import io.ktor.client.request.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class ApiServiceImpl(private val prefImpl: PrefImpl) : ApiService {
+class ApiServiceImpl(private val prefRepository: PrefRepository) : ApiService {
 
     companion object {
         const val API_KEY = "cur_live_Za1cWaFoij854bxumQmM9Gi5xubU8IemNv9YWQrY"
@@ -65,7 +66,7 @@ class ApiServiceImpl(private val prefImpl: PrefImpl) : ApiService {
 
                 //Persist time-stamp
                 val timeStamp = apiResponse.meta.lastUpdatedAt
-                prefImpl.saveLastUpdated(timeStamp)
+                prefRepository.saveLastUpdated(timeStamp)
 
                 println("Response: ${response.body<String>()}")
                 RequestState.Success(data = availableCurrencies)
